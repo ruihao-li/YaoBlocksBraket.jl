@@ -12,7 +12,7 @@
 
 ## Installation
 
-To install YaoBlocksQobj, please open [Julia's interactive session (REPL)](https://docs.julialang.org/en/v1/manual/getting-started/) and press ] key in the REPL to use the package mode, then type the following command
+To install YaoBlocksBraket, please open [Julia's interactive session (REPL)](https://docs.julialang.org/en/v1/manual/getting-started/) and press ] key in the REPL to use the package mode, then type the following command
 
 ```julia
 pkg> add https://github.com/ruihao-li/YaoBlocksBraket.jl
