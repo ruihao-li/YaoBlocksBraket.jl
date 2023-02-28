@@ -37,10 +37,10 @@ yao_qc = chain(3, put(1=>YaoBlocks.X),
 braket_qc = convert_to_braket(yao_qc)
 ```
 
-3. Run the circuit on Braket
+3. Run the circuit on Braket (with AWS credentials properly set up)
 
 ```julia
 using Braket
 dev = AwsDevice("arn:aws:braket:::device/quantum-simulator/amazon/sv1")
-res = result(dev, braket_qc)
+res = result(dev(braket_qc, shots=100))
 ```
