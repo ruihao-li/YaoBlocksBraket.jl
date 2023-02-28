@@ -1,5 +1,6 @@
 # YaoBlocksBraket
 
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://ruihao-li.github.io/YaoBlocksBraket.jl/dev/)
 [![Build Status](https://github.com/ruihao-li/YaoBlocksBraket.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/ruihao-li/YaoBlocksBraket.jl/actions)
 
 <!-- [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://ruihao-li.github.io/YaoBlocksBraket.jl/stable/)

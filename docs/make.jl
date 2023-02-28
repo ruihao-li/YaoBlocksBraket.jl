@@ -1,11 +1,9 @@
 using YaoBlocksBraket
 using Documenter
 
-DocMeta.setdocmeta!(YaoBlocksBraket, :DocTestSetup, :(using YaoBlocksBraket); recursive=true)
-
 makedocs(;
     modules=[YaoBlocksBraket],
-    authors="Ruihao Li, Elliot Golias",
+    authors="Ruihao Li",
     repo="https://github.com/ruihao-li/YaoBlocksBraket.jl/blob/{commit}{path}#{line}",
     sitename="YaoBlocksBraket.jl",
     format=Documenter.HTML(;
@@ -15,11 +13,12 @@ makedocs(;
         assets=String[],
     ),
     pages=[
-        "Home" => "index.md",
+        "Quickstart" => "index.md", 
+        "API References" => "refs.md"
     ],
 )
 
 deploydocs(;
-    repo="github.com/ruihao-li/YaoBlocksBraket.jl",
+    repo="github.com/ruihao-li/YaoBlocksBraket.jl.git",
     devbranch="main",
 )

@@ -1,6 +1,6 @@
 name = "YaoBlocksBraket"
 uuid = "212b0375-7d72-43e4-9d0a-ceee00ec319a"
-authors = ["Ruihao Li", "Elliot Golias"]
+authors = ["Ruihao Li"]
 version = "0.1.0"
 
 [deps]
