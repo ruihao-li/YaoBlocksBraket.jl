@@ -45,7 +45,7 @@ function generate_inst!(inst, blk::ControlBlock{N,GT,C}, locs, controls) where {
     )
 end
 
-function generate_inst!(inst, m::YaoBlocks.Measure{N}, locs, controls) where {N} 
+function generate_inst!(inst, m::YaoBlocks.Measure{N}, locs, controls) where {N}
     mlocs = sublocs(m.locations isa AllLocs ? [1:N...] : [m.locations...], locs)
     (m.operator isa ComputationalBasis) || error("measuring an operator is not supported")
     (length(controls) == 0) || error("controlled measure is not supported")
@@ -60,21 +60,23 @@ for (GT, BKG, MAXC) in [
     (:I2Gate, Braket.I, 0),
     (:HGate, Braket.H, 0),
     (:TGate, Braket.T, 0),
-    (:SWAPGate, Braket.Swap, 0),
+    (:SWAPGate, Braket.Swap, 1),
 ]
     @eval function generate_inst!(inst, gate::$GT, locs, controls)
         if length(controls) <= $MAXC
             if length(controls) == 0
                 braket_gate = $BKG
             elseif length(controls) == 1
-                braket_gate = (typeof(gate)==YaoBlocks.XGate ? Braket.CNot : typeof(gate)==YaoBlocks.YGate ? Braket.CY : Braket.CZ)
+                braket_gate = (
+                    typeof(gate) == YaoBlocks.XGate ? Braket.CNot :
+                    typeof(gate) == YaoBlocks.YGate ? Braket.CY : 
+                    typeof(gate) == YaoBlocks.ZGate ? Braket.CZ :
+                    Braket.CSwap
+                )
             else
                 braket_gate = Braket.CCNot
             end
-            push!(
-                inst,
-                (braket_gate, [controls..., locs...])
-            )
+            push!(inst, (braket_gate, [controls..., locs...]))
         else
             error("too many control bits!")
         end
@@ -83,9 +85,9 @@ end
 
 # rotation gates
 for (GT, BKG, PARAMS, MAXC) in [
-    (:(RotationGate{2,T,XGate} where{T}), Braket.Rx, :(b.theta), 0),
-    (:(RotationGate{2,T,YGate} where{T}), Braket.Ry, :(b.theta), 0),
-    (:(RotationGate{2,T,ZGate} where{T}), Braket.Rz, :(b.theta), 0),
+    (:(RotationGate{2,T,XGate} where {T}), Braket.Rx, :(b.theta), 0),
+    (:(RotationGate{2,T,YGate} where {T}), Braket.Ry, :(b.theta), 0),
+    (:(RotationGate{2,T,ZGate} where {T}), Braket.Rz, :(b.theta), 0),
     (:(ShiftGate), Braket.PhaseShift, :(b.theta), 1),
 ]
     @eval function generate_inst!(inst, b::$GT, locs, controls)
@@ -95,10 +97,7 @@ for (GT, BKG, PARAMS, MAXC) in [
             else
                 braket_gate = Braket.CPhaseShift
             end
-            push!(
-                inst,
-                (braket_gate, [controls..., locs...], $PARAMS)
-            )
+            push!(inst, (braket_gate, [controls..., locs...], $PARAMS))
         else
             error("too many control bits! got $controls (length > $($(MAXC)))")
         end
