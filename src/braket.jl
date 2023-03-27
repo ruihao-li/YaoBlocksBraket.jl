@@ -36,7 +36,7 @@ function generate_inst!(inst, blk::PutBlock{N,M}, locs, controls) where {N,M}
 end
 
 function generate_inst!(inst, blk::ControlBlock{N,GT,C}, locs, controls) where {N,GT,C}
-    any(==(0), blk.ctrl_config) && error("Inverse Control used in Control gate context")
+    any(==(0), blk.ctrl_config) && error("Inverse Control used in Control gate context.")
     generate_inst!(
         inst,
         blk.content,
@@ -47,9 +47,22 @@ end
 
 function generate_inst!(inst, m::YaoBlocks.Measure{N}, locs, controls) where {N}
     mlocs = sublocs(m.locations isa AllLocs ? [1:N...] : [m.locations...], locs)
-    (m.operator isa ComputationalBasis) || error("measuring an operator is not supported")
-    (length(controls) == 0) || error("controlled measure is not supported")
+    (m.operator isa ComputationalBasis) ||
+        error("Measuring an operator is not yet supported.")
+    (length(controls) == 0) || error("Controlled measure is not yet supported.")
     push!(inst, (Braket.Probability, mlocs))
+end
+
+# General unitary gates
+function generate_inst!(
+    inst,
+    gate::GeneralMatrixBlock{N,C,MT},
+    locs,
+    controls,
+) where {N,C,MT}
+    (length(controls) == 0) ||
+        error("Controlled version of general unitary is not yet supported.")
+    push!(inst, (Braket.Unitary, [locs...], gate.mat))
 end
 
 # Primitive cosntant gates
@@ -69,21 +82,20 @@ for (GT, BKG, MAXC) in [
             elseif length(controls) == 1
                 braket_gate = (
                     typeof(gate) == YaoBlocks.XGate ? Braket.CNot :
-                    typeof(gate) == YaoBlocks.YGate ? Braket.CY : 
-                    typeof(gate) == YaoBlocks.ZGate ? Braket.CZ :
-                    Braket.CSwap
+                    typeof(gate) == YaoBlocks.YGate ? Braket.CY :
+                    typeof(gate) == YaoBlocks.ZGate ? Braket.CZ : Braket.CSwap
                 )
             else
                 braket_gate = Braket.CCNot
             end
             push!(inst, (braket_gate, [controls..., locs...]))
         else
-            error("too many control bits!")
+            error("Too many control bits!")
         end
     end
 end
 
-# rotation gates
+# Rotation gates
 for (GT, BKG, PARAMS, MAXC) in [
     (:(RotationGate{2,T,XGate} where {T}), Braket.Rx, :(b.theta), 0),
     (:(RotationGate{2,T,YGate} where {T}), Braket.Ry, :(b.theta), 0),
@@ -99,7 +111,7 @@ for (GT, BKG, PARAMS, MAXC) in [
             end
             push!(inst, (braket_gate, [controls..., locs...], $PARAMS))
         else
-            error("too many control bits! got $controls (length > $($(MAXC)))")
+            error("Too many control bits! Got $controls (length > $($(MAXC)))")
         end
     end
 end
