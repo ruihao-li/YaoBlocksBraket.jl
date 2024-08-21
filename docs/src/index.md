@@ -6,7 +6,6 @@ CurrentModule = YaoBlocksBraket
 
 Documentation for [YaoBlocksBraket](https://github.com/ruihao-li/YaoBlocksBraket.jl).
 
-
 ## Installation
 
 To install YaoBlocksBraket, please open [Julia's interactive session (REPL)](https://docs.julialang.org/en/v1/manual/getting-started/) and press ] key in the REPL to use the package mode, then type the following command
@@ -20,7 +19,7 @@ pkg> add https://github.com/ruihao-li/YaoBlocksBraket.jl
 1. Create a circuit in Yao
 
 ```julia
-using YaoBlocks, YaoBlocksBraket
+using Yao, YaoBlocksBraket
 yao_qc = chain(3, put(1=>YaoBlocks.X), 
                 put(2=>YaoBlocks.Y),             
                 put(3=>YaoBlocks.Z), 
@@ -44,5 +43,3 @@ using Braket
 dev = AwsDevice("arn:aws:braket:::device/quantum-simulator/amazon/sv1")
 res = result(dev(braket_qc, shots=100))
 ```
-
-

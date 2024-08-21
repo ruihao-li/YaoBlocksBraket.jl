@@ -1,4 +1,4 @@
-using YaoBlocks, Braket, YaoBlocksBraket
+using Yao, Braket, YaoBlocksBraket
 using Test
 
 @testset "YaoBlocksBraket.jl" begin

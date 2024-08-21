@@ -2,7 +2,7 @@ module YaoBlocksBraket
 
 export generate_inst, convert_to_braket
 
-using YaoBlocks
+using Yao
 using Braket
 
 include("braket.jl")
